@@ -1,0 +1,50 @@
+import kotlin.math.abs
+
+var maxValue: Long = 0
+var minValue: Long = 0
+
+/**
+ * Производит расчеты для каждого x с шагом 0.1
+ */
+fun main(args: Array<String>) {
+    var x = 1.0f
+    do {
+        calculateValue(x).let { result ->
+            if (result < minValue) {
+                minValue = result
+            } else if (result > maxValue) {
+                maxValue = result
+            }
+            println("current result is $result by $x")
+        }
+        x += 0.1f
+    } while (x < 2021.0f)
+
+    println("Max value is $maxValue")
+    println("Min value is $minValue")
+}
+
+/**
+ * возвращает округленное значение многочлена по текущему X
+ */
+private fun calculateValue(value: Float): Long {
+    var result = 1.0
+
+    for (root in 1..2021) {
+        result *= (value - root)
+    }
+
+    return result.roundUp()
+}
+
+/**
+ * Округляет значение по правилам математики
+ */
+private fun Double.roundUp(): Long {
+    val remainder = this - this.toInt()
+    return if (abs(remainder) > 0.5) {
+        if (remainder > 0) {
+            this.toLong() + 1
+        } else this.toLong() - 1
+    } else this.toLong()
+}
